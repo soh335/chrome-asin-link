@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>AsinLink option</title>
+    <script type="text/javascript">
+      function init() {
+        var form = document.getElementById('setting');
+        var link_setting = localStorage['link_setting'];
+        var textarea = document.getElementById('link_setting');
+        var setting = JSON.parse(link_setting);
+        for ( var i = 0; i < setting.length; i++ ) {
+          var str = setting[i].name+" "+setting[i].url;
+          switch(setting[i].cond) {
+            case 'all':
+              break;;
+            case 'deny':
+              str += ' !'+setting[i].categories.join(',');
+              break;
+            case 'allow':
+              str += ' '+setting[i].categories.join(',');
+              break;
+          }
+          textarea.value += str;
+        }
+        form.addEventListener('submit', function() {
+            var split_setting = textarea.value.split(/$/gm);
+            var options = [];
+            for (var i = 0; i < split_setting.length; i++) {
+              var hash = {};
+              var rows = split_setting[i].split(" ");
+              if (rows.length == 3) {
+                var categories = rows.pop();
+                if (categories.substr(0, 1) === '!') {
+                  hash.cond = 'deny';
+                  categories = categories.substr(1);
+                }
+                else {
+                  hash.cond = 'allow';
+                }
+                hash.categories = categories.split(',');
+              }
+              else {
+                hash.cond = 'all';
+              }
+              hash.name = rows[0];
+              hash.url = rows[1];
+              options.push(hash);
+
+            }
+            localStorage['link_setting'] = JSON.stringify(options);
+        }, false);
+      }
+      window.addEventListener('load', init, false);
+    </script>
+  </head>
+  <body>
+    <h1>AsinLink options</h1>
+    <form id="setting">
+      <textarea id="link_setting" cols="60" rows="7"></textarea>
+      <input type="submit" value="save" />
+  </form>
+  </body>
+</html>

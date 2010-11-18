@@ -1,0 +1,14 @@
+{
+  "name": "AsinLink",
+  "version": "1.0",
+  "description": "add asin link in amazon page.",
+  "content_scripts": [
+    {
+      "matches": ["http://www.amazon.co.jp/*"],
+      "js": ["asinLink.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "options_page": "options.html",
+  "background_page": "background.html"
+} 

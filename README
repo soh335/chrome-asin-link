@@ -1,0 +1,10 @@
+amazonのページでasin情報を取得して、それをもとにリンクを生成する
+
+オプションで、例えばこう設定すると、
+
+hatena http://d.hatena.ne.jp/asin/{ASIN}
+読書メーター http://book.akahoshitakuya.com/b/{ASIN} 和書,洋書
+amazon http://amazon.co.jp/dp/{ASIN}
+
+hatenaとamazonへのリンクは常に表示されて、読書メーターへのリンクは和書と洋書のカテゴリの場合のみ表示される。
+今のところURLにある{ASIN}を置き換える。

@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      chrome.extension.onRequest.addListener(
+        function(request, sender, sendResponse) {
+          switch (request.name) {
+            case "getLinks":
+              var res = [];
+              var setting = JSON.parse(localStorage['link_setting']) || [];
+              var category = request.category;
+              var asin = request.asin;
+
+              for (var i = 0; i < setting.length; i++) {
+                if (category === undefined) {
+                  setting[i].cond = 'all';
+                }
+                switch(setting[i].cond) {
+                  case 'allow':
+                    if (setting[i].categories.indexOf(category) == -1) {
+                      continue;
+                    }
+                    break;
+                  case 'deny':
+                    if (setting[i].categories.indexOf(category) != -1) {
+                      continue;
+                    }
+                    break;
+                  case 'all':
+                  default:
+                }
+                res.push('<a href="'+setting[i].url.replace(/{ASIN}/, asin)+'">'+setting[i].name+'</a>');
+              }
+              sendResponse(
+                {
+                  links: res
+                }
+              );
+          }
+        }
+      );
+    </script>
+  </head>
+</body>
